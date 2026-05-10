@@ -85,7 +85,12 @@ export async function estimateMacrosFromImage(imagePath: string, mimeType: strin
     const estimation = JSON.parse(response.text) as MacroEstimation;
     return estimation;
   } catch (error) {
-    logger.error({ error }, 'Error estimating macros from image');
-    throw new Error('Failed to analyze image');
+    logger.error({ 
+      errorName: (error as any).name,
+      status: (error as any).status,
+      message: (error as any).message,
+      stack: (error as any).stack
+    }, 'Error estimating macros from image');
+    throw new Error(`Failed to analyze image: ${(error as any).message}`);
   }
 }
